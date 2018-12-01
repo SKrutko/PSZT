@@ -5,13 +5,26 @@ import java.io.IOException;
 import static java.lang.System.out;
 
 public class Main {
+    private Window window;
 
     public static void main(String[] args) {
         Main main = new Main();
         main.ReadFile();
 
-
     }
+
+    private Main() {
+        try {
+            window = new Window();
+            //this.view = new View();
+            //view.setVisible(true);
+        }
+        catch(Exception e)
+        {
+            out.println("exception in Main()");
+        }
+    }
+
     private void ReadFile()
     {
         try {
