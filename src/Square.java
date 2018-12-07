@@ -36,3 +36,5 @@ public class Square {
         this.rightEdge = rightEdge;
     }
 }
+
+

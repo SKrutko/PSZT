@@ -5,6 +5,7 @@ public class Window {
     private JFrame  mainWindow;
     private View view;
 
+
     public static int frameWidth = 800;
     public static int frameHeight = 600;
 
@@ -12,6 +13,7 @@ public class Window {
 
     public Window()
     {
+        //set basic info about main window
         mainWindow = new JFrame("Country Road");
         mainWindow.setVisible(true);
         mainWindow.setSize(frameWidth, frameHeight);
@@ -20,10 +22,13 @@ public class Window {
         mainWindow.setLocationRelativeTo(null);
 
         mainWindow.add(view = new View());
-        //getContentPane().setBackground(backgroundColor);
 
         gameboardSize = frameWidth < frameHeight ? frameWidth : frameHeight - 100;
         view.repaint();
+    }
+
+    public void setGameBoard(GameBoard gameBoard) {
+        view.setGameBoard(gameBoard);
     }
 
 

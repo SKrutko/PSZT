@@ -34,6 +34,7 @@ public class Main {
             int n; // size of game board
             n = Integer.parseInt(br.readLine());
             GameBoard MainBoard = new GameBoard(n);
+            window.setGameBoard(MainBoard);
 
             String str;
             while((str = br.readLine() )!= null)
@@ -46,6 +47,14 @@ public class Main {
                 out.println("elo");
                 }
             }
+
+            try {
+                MainBoard.testView();//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!testing View
+            }
+            catch (Exception e) {
+                out.println("ERROR WHILE TESTING VIEW");
+            }
+
             br.close();
         } catch (IOException e) {
             out.println("Error while opening file");
