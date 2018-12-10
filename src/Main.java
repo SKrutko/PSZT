@@ -8,8 +8,18 @@ public class Main {
     private Window window;
 
     public static void main(String[] args) {
-        Main main = new Main();
-        main.ReadFile();
+        try {
+            Main main = new Main();
+            main.ReadFile();
+        }
+        catch (ArrayIndexOutOfBoundsException arrayE)
+        {
+            out.println("Exception 01 in main");
+        }
+        catch (Exception e)
+        {
+            out.println("Exception 02 in main");
+        }
 
     }
 
@@ -37,15 +47,47 @@ public class Main {
             window.setGameBoard(MainBoard);
 
             String str;
-            while((str = br.readLine() )!= null)
+            int i , j =0;
+            for (i = 0; i < n; i++){
+            str = br.readLine();
+                int left = -1;
+             String [] line = str.split(" ");
+             for (String s:line
+                        ) {
+                 int right = Integer.parseInt(s);
+                 MainBoard.VerticalBorder(i, j, left, right);
+                 left = right;
+                 j++;
+                }
+                j = 0;
+            }
+            i = 0;
+            j = 0;
+            int [] previousLine = new int[n];
+            for (int s = 0; s<n; s++){
+                previousLine[s] = -1;
+            }
+           while((str = br.readLine() )!= null)
             {
-                int i = 0, j = 0;
-                out.println(str);
+
+                //out.println(str);
                 String [] line = str.split(" ");
+
                 for (String s:line
                         ) {
-                out.println("elo");
+                    int currentBottomType = Integer.parseInt(s);
+                    MainBoard.HorizontalBorder(i, j, previousLine[j], currentBottomType);
+                    out.println( j + "  " + previousLine[j] + " " + currentBottomType);
+                    previousLine[j] = currentBottomType;
+
+                    j++;
                 }
+                j = 0;
+                i++;
+            }
+            for(j = 0; j < n; j++)
+            {
+                MainBoard.HorizontalBorder(n - 1, j, previousLine[j], -1);
             }
 
             try {
@@ -56,8 +98,13 @@ public class Main {
             }
 
             br.close();
+        //    MainBoard.HorizontalEdge(n);
         } catch (IOException e) {
             out.println("Error while opening file");
+        }
+        catch (Exception e)
+        {
+            out.println("Exception in readfile() " + e.toString());
         }
     }
 }

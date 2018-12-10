@@ -10,14 +10,55 @@ public class GameBoard {
     private int size;
     private Square [] [] squares;
 
+
     public GameBoard(int n) {
         size = n;
         squares = new Square[n][n];
+        for(int i = 0; i < size; i ++)
+        {
+            for(int j = 0; j < size; j++)
+                squares[i][j] = new Square();
+        }
+
 
     }
 
     public int getSize() {
         return size;
+    }
+
+    public void HorizontalBorder(int i, int j, int upperEdge, int bottomEdge ){
+        if(upperEdge == -1)
+            squares[i][j].setUpperEdge(BorderType.BORDER);
+        else if(upperEdge == 0)
+            squares[i][j].setUpperEdge(BorderType.INTERNAL);
+        else
+            squares[i][j].setUpperEdge(BorderType.EXTERNAL);
+
+        if(bottomEdge == -1)
+            squares[i][j].setBottomEdge(BorderType.BORDER);
+        else if(bottomEdge == 0)
+            squares[i][j].setBottomEdge(BorderType.INTERNAL);
+        else
+            squares[i][j].setBottomEdge(BorderType.EXTERNAL);
+
+    }
+
+    public void VerticalBorder(int i, int j, int leftEdge, int rightEdge ){
+        if(leftEdge == -1)
+            squares[i][j].setLeftEdge(BorderType.BORDER);
+        else if(leftEdge == 0)
+            squares[i][j].setLeftEdge(BorderType.INTERNAL);
+        else
+            squares[i][j].setLeftEdge(BorderType.EXTERNAL);
+
+        if(rightEdge == -1)
+            squares[i][j].setRightEdge(BorderType.BORDER);
+        else if(rightEdge == 0)
+            squares[i][j].setRightEdge(BorderType.INTERNAL);
+        else
+            squares[i][j].setRightEdge(BorderType.EXTERNAL);
+
     }
 
     public BorderType getUpperEdgeType(int i, int j)
@@ -39,13 +80,9 @@ public class GameBoard {
 
     public void testView() // created for classes view and window testing only!!
     {
-        for(int i = 0; i < size; i ++)
-        {
-            for(int j = 0; j < size; j++)
-                squares[i][j] = new Square();
-        }
 
-        squares[0][0].setRightEdge(BorderType.INTERNAL); //0
+
+        /*squares[0][0].setRightEdge(BorderType.INTERNAL); //0
         squares[0][1].setRightEdge(BorderType.INTERNAL); //0
         squares[0][2].setRightEdge(BorderType.EXTERNAL); //1
         squares[0][3].setRightEdge(BorderType.INTERNAL); //0
@@ -104,7 +141,7 @@ public class GameBoard {
         squares[4][2].setBottomEdge(BorderType.BORDER);
         squares[4][3].setBottomEdge(BorderType.BORDER);
         squares[4][4].setBottomEdge(BorderType.BORDER);
-
+*/
 
     }
 }

@@ -4,6 +4,9 @@ public class Square {
     private BorderType leftEdge;
     private BorderType rightEdge;
 
+    public Square() {
+    }
+
     public BorderType getUpperEdge() {
         return upperEdge;
     }
