@@ -1,6 +1,10 @@
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.text.Style;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import static java.lang.System.out; //usunac po zrobieniu akcji przycisku
 
 public class View extends JPanel {
     //colors used for painting
@@ -17,6 +21,10 @@ public class View extends JPanel {
     private GameBoard gameBoard;
 
     int squareSize; // size of the smallest component of Gameoard
+
+    JButton clearButton = new JButton("clear");
+    JButton checkButton = new JButton("check");
+    JButton revealButton = new JButton("reveal");
 
     public void setGameBoard(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
@@ -84,14 +92,53 @@ public class View extends JPanel {
         }
     }
 
+    private void paintButton(JButton button, int x, int y){
+        button.setBounds(x,y,100,50); // set size of button
+        button.setVisible(true); // set visibility
+        //button.setBackground(Color.white);
+        button.setBorder(new LineBorder(Color.BLACK));
+        add(button);
+    };
+
+    private void clearAction(JButton button){
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                out.println("clear");
+            }
+        });
+    }; //zmodyfikowac jak bedziemy mialy heurystyke; narazie wypisuje tekst do konsoli
+
+    private void revealAction(JButton button){
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                out.println("check");
+            }
+        });
+    };
+
+    private void checkAction(JButton button){
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                out.println("reveal");
+            }
+        });
+    };
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         paintBackground(g);
         paintGameboard(g);
-
         paintBorders(g);
+        paintButton(clearButton, 10, 125);
+        paintButton(checkButton, 10, 225);
+        paintButton(revealButton, 10, 325);
+        clearAction(clearButton);
+        checkAction(checkButton);
+        revealAction(revealButton);
     }
 
 }
