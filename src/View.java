@@ -113,7 +113,7 @@ public class View extends JPanel {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                out.println("check");
+                out.println("reveal");
             }
         });
     };
@@ -122,7 +122,7 @@ public class View extends JPanel {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                out.println("reveal");
+                out.println("check");
             }
         });
     };
