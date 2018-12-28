@@ -3,6 +3,7 @@ public class Square {
     private BorderType bottomEdge;
     private BorderType leftEdge;
     private BorderType rightEdge;
+    private int countryIndex;
 
     public Square() {
     }

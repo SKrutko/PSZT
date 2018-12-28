@@ -9,6 +9,7 @@ public class GameBoard {
 
     private int size;
     private Square [] [] squares;
+    private int numberOfCountries = 0;
 
 
     public GameBoard(int n) {
@@ -142,6 +143,14 @@ public class GameBoard {
         squares[4][3].setBottomEdge(BorderType.BORDER);
         squares[4][4].setBottomEdge(BorderType.BORDER);
 */
+
+    }
+    public void countContries()
+    {
+        //wypełnić pole countryIndex w każdym square
+        //wypełnić pole numberOfCountries
+
+
 
     }
 }
