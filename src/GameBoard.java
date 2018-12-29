@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static java.lang.System.out;
 
@@ -9,7 +10,7 @@ public class GameBoard {
 
     private int size;
     private Square [] [] squares;
-    private int numberOfCountries = 0;
+    private int numberOfCountries;
     public AStar aStar = new AStar();
 
 
@@ -21,12 +22,18 @@ public class GameBoard {
             for(int j = 0; j < size; j++)
                 squares[i][j] = new Square();
         }
-
-
     }
 
     public int getSize() {
         return size;
+    }
+
+    public void setNumberOfCountries(int numberOfCountries) {
+        this.numberOfCountries = numberOfCountries;
+    }
+
+    public int getNumberOfCountries() {
+        return numberOfCountries;
     }
 
     public void HorizontalBorder(int i, int j, int upperEdge, int bottomEdge ){
@@ -146,13 +153,14 @@ public class GameBoard {
 */
 
     }
-    public void countContries()
+
+    public int getNumberOfCountryIndex(int i, int j, int index) //to check in console if values are proper
     {
-        //wypełnić pole countryIndex w każdym square
-        //wypełnić pole numberOfCountries
-
-
-
+       return squares[i][j].getCountryIndex();
     }
 
+    public void countCountries(int i, int j, int index)
+    {
+        squares[i][j].setCountryIndex(index);
+    }
 }

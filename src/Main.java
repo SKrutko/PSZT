@@ -61,15 +61,19 @@ public class Main {
                 }
                 j = 0;
             }
+
+            int x = i+1;
+
             i = 0;
             j = 0;
             int [] previousLine = new int[n];
             for (int s = 0; s<n; s++){
                 previousLine[s] = -1;
             }
-           while((str = br.readLine() )!= null)
+           //while((str = br.readLine() )!= null)
+            for(; x<n+n; x++)
             {
-
+                str = br.readLine();
                 //out.println(str);
                 String [] line = str.split(" ");
 
@@ -85,6 +89,32 @@ public class Main {
                 j = 0;
                 i++;
             }
+
+            i = 0;
+            j = 0;
+
+            int MaxNumberOfCountry = 0;
+            while((str = br.readLine() )!= null)
+            {
+                String [] line = str.split(" ");
+
+                for (String s:line
+                        ) {
+                    int index = Integer.parseInt(s);
+                    MainBoard.countCountries(i,j,index);
+                    out.println( "Number of country. Square" + "[" + i + "][" + j + "]" + "=" + MainBoard.getNumberOfCountryIndex(i,j,index));
+                    j++;
+
+                    if(MaxNumberOfCountry < index)
+                        MaxNumberOfCountry = index;
+                }
+                j = 0;
+                i++;
+            }
+
+            MainBoard.setNumberOfCountries(MaxNumberOfCountry);
+            //out.println( MainBoard.getNumberOfCountries()); //check if number of coutries in MainBoard is proper
+
             for(j = 0; j < n; j++)
             {
                 MainBoard.HorizontalBorder(n - 1, j, previousLine[j], -1);

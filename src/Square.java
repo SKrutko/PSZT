@@ -24,6 +24,8 @@ public class Square {
         return rightEdge;
     }
 
+    public int getCountryIndex() { return countryIndex; }
+
     public void setUpperEdge(BorderType upperEdge) {
         this.upperEdge = upperEdge;
     }
@@ -39,6 +41,10 @@ public class Square {
     public void setRightEdge(BorderType rightEdge) {
         this.rightEdge = rightEdge;
     }
+
+    public void setCountryIndex(int countryIndex) { this.countryIndex = countryIndex; }
+
+
 }
 
 
