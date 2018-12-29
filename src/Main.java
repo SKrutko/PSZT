@@ -96,6 +96,7 @@ public class Main {
             catch (Exception e) {
                 out.println("ERROR WHILE TESTING VIEW");
             }
+            MainBoard.aStar.testSolution();
 
             br.close();
         //    MainBoard.HorizontalEdge(n);
@@ -106,5 +107,6 @@ public class Main {
         {
             out.println("Exception in readfile() " + e.toString());
         }
+
     }
 }

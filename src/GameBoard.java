@@ -10,6 +10,7 @@ public class GameBoard {
     private int size;
     private Square [] [] squares;
     private int numberOfCountries = 0;
+    public AStar aStar = new AStar();
 
 
     public GameBoard(int n) {
@@ -153,4 +154,5 @@ public class GameBoard {
 
 
     }
+
 }

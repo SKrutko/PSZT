@@ -11,6 +11,7 @@ public class View extends JPanel {
     private Color backgroundColor = Color.CYAN;
     private Color gameboardColor = Color.WHITE;
     private Color borderColor = Color.BLACK;
+    private Color roadrColor = Color.MAGENTA;
 
     private Point gameboardZero = new Point(0, 0);//location of the upper left corner of the gameboard
 
@@ -91,6 +92,27 @@ public class View extends JPanel {
 
         }
     }
+    private void paintRoad(Graphics g)
+    {
+        int x1, x2, y1, y2;
+        for(int i = 0; i < gameBoard.aStar.getSolutionSize() - 2;)//?
+        {
+            y1 = gameBoard.aStar.getSolutionNext(i);
+            x1 = gameBoard.aStar.getSolutionNext(i+1);
+            y2 = gameBoard.aStar.getSolutionNext(i +2);
+            x2 = gameBoard.aStar.getSolutionNext(i +3);
+            i+=2;
+            System.out.println(x1 + " " +  y1 + " " + x2 + " " + y2);
+            g.setColor(roadrColor);
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setStroke(thickBorder);
+            g2.drawLine(gameboardZero.x + x1 * squareSize + squareSize/2,
+                    gameboardZero.y + y1 * squareSize + squareSize/2,
+                    gameboardZero.x + x2 * squareSize + squareSize/2,
+                    gameboardZero.y + y2 * squareSize +squareSize/2);
+
+        }
+    }
 
     private void paintButton(JButton button, int x, int y){
         button.setBounds(x,y,100,50); // set size of button
@@ -133,6 +155,7 @@ public class View extends JPanel {
         paintBackground(g);
         paintGameboard(g);
         paintBorders(g);
+        paintRoad(g);
         paintButton(clearButton, 10, 125);
         paintButton(checkButton, 10, 225);
         paintButton(revealButton, 10, 325);
