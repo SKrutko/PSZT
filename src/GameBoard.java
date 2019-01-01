@@ -9,12 +9,13 @@ import static java.lang.System.out;
 public class GameBoard {
 
     private int size;
-    private Square [] [] squares;
+    private Window window;
+    public Square [] [] squares;
     private int numberOfCountries;
-    public AStar aStar = new AStar();
+    public AStar aStar;
 
 
-    public GameBoard(int n) {
+    public GameBoard(int n, Window window) {
         size = n;
         squares = new Square[n][n];
         for(int i = 0; i < size; i ++)
@@ -22,6 +23,8 @@ public class GameBoard {
             for(int j = 0; j < size; j++)
                 squares[i][j] = new Square();
         }
+        this.window = window;
+        this.aStar = new AStar(this, window);
     }
 
     public int getSize() {

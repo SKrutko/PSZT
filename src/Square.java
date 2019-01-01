@@ -5,6 +5,10 @@ public class Square {
     private BorderType rightEdge;
     private int countryIndex;
 
+    private boolean belongsToSolution = false;
+
+    private Cell lastCell;
+
     public Square() {
     }
 
@@ -43,6 +47,19 @@ public class Square {
     }
 
     public void setCountryIndex(int countryIndex) { this.countryIndex = countryIndex; }
+
+    public boolean getBelongsToSolution() {
+        return belongsToSolution;
+    }
+
+    public void setBelongsToSolution(boolean belongsToSolution) {
+        this.belongsToSolution = belongsToSolution;
+    }
+    public void addToSolution()
+    {
+        this.belongsToSolution = true;
+    }
+
 
 
 }

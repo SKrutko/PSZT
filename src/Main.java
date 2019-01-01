@@ -6,11 +6,15 @@ import static java.lang.System.out;
 
 public class Main {
     private Window window;
+    private GameBoard MainBoard;
 
     public static void main(String[] args) {
         try {
             Main main = new Main();
             main.ReadFile();
+            //main.MainBoard.aStar.testSolution();
+            main.MainBoard.aStar.solve();
+
         }
         catch (ArrayIndexOutOfBoundsException arrayE)
         {
@@ -20,6 +24,7 @@ public class Main {
         {
             out.println("Exception 02 in main");
         }
+
 
     }
 
@@ -38,12 +43,12 @@ public class Main {
     private void ReadFile()
     {
         try {
-            FileReader fr = new FileReader("pierwsza_plansza.txt");
+            FileReader fr = new FileReader("countryroad2.txt");
             BufferedReader br = new BufferedReader(fr);
 
             int n; // size of game board
             n = Integer.parseInt(br.readLine());
-            GameBoard MainBoard = new GameBoard(n);
+            MainBoard = new GameBoard(n, window);
             window.setGameBoard(MainBoard);
 
             String str;
@@ -126,7 +131,7 @@ public class Main {
             catch (Exception e) {
                 out.println("ERROR WHILE TESTING VIEW");
             }
-            MainBoard.aStar.testSolution();
+
 
             br.close();
         //    MainBoard.HorizontalEdge(n);

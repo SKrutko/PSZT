@@ -102,7 +102,6 @@ public class View extends JPanel {
             y2 = gameBoard.aStar.getSolutionNext(i +2);
             x2 = gameBoard.aStar.getSolutionNext(i +3);
             i+=2;
-            System.out.println(x1 + " " +  y1 + " " + x2 + " " + y2);
             g.setColor(roadrColor);
             Graphics2D g2 = (Graphics2D) g;
             g2.setStroke(thickBorder);

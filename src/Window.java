@@ -31,5 +31,9 @@ public class Window {
         view.setGameBoard(gameBoard);
     }
 
+    public void repaint(){
+        view.repaint();
+    }
+
 
 }
