@@ -28,7 +28,7 @@ public class AStar {
         while(!solved && startI < gameboard.getSize())
         {
             aStar(startI, startJ++);
-            if(startJ >= gameboard.getSize())
+            if(startJ >= gameboard.getSize() - 1)
             {
                 startI++;
                 startJ = 0;
@@ -46,7 +46,10 @@ public class AStar {
     private void aStar(int startI, int startJ)//, Vector<Integer> [] visitedPaths)
     {
         int currentI, currentJ; //(i,j) of current Square
-        Vector<Integer> visitedCountries = new Vector<>(); //indexes of countries that have been visited
+        //Vector<Integer> visitedCountries = new Vector<>(); //indexes of countries that have been visited
+        boolean [] visitedCountries = new boolean[gameboard.getNumberOfCountries()];
+        for (int i = 0; i < gameboard.getNumberOfCountries(); i++)
+            visitedCountries[i] = false;
         int currentCountryIndex;
         Vector<Cell> openSquares = new Vector<>(); // squares that have been visited but haven't been been closed
 
@@ -55,9 +58,11 @@ public class AStar {
         parentCell.setCostCh(0);
         parentCell.setIJ(startI, startJ);
         parentCell.setStartCell(true);
-        openSquares.add(parentCell);
 
-        while(openSquares.size() > 0 && !checkSolution(visitedCountries.size()))
+        addToOpenSquares(parentCell, startI, startJ, parentCell.getI(), parentCell.getJ() + 1, openSquares);
+        //openSquares.add(parentCell);
+
+        while(openSquares.size() > 0 && !checkSolution(countVisitedCountries(visitedCountries)))
         {
             int index = pickNext(openSquares);//picks node with the smallest cost = C + h and returns its index
             Cell current = openSquares.elementAt(index);
@@ -69,7 +74,7 @@ public class AStar {
                 //there are up to four squares that can be accessed from current
                 //if any of them can belong to solution it is added to openSquares
                 if (currentJ > 0 && checkNextCell(currentI, currentJ - 1,
-                        current, currentCountryIndex,startI, startJ))
+                        current, currentCountryIndex, startI, startJ))
                     addToOpenSquares(current, startI, startJ, currentI, currentJ - 1, openSquares);
 
                 if (currentI > 0 && checkNextCell(currentI - 1, currentJ,
@@ -86,7 +91,8 @@ public class AStar {
                         current, currentCountryIndex, startI, startJ))
                     addToOpenSquares(current, startI, startJ, currentI + 1, currentJ, openSquares);
 
-                visitedCountries.removeAllElements();
+                //visitedCountries.removeAllElements();
+                clearVisitedCountries(visitedCountries);
                 solution = reversePath(current, startI, startJ, visitedCountries);
                 //Thread.sleep(100);
                 window.repaint();
@@ -97,20 +103,44 @@ public class AStar {
             }
         }
     }
+    private void clearVisitedCountries(boolean [] visitedCountries)
+    {
+        for(int i = 0; i < gameboard.getNumberOfCountries(); i ++)
+            visitedCountries[i] = false;
+    }
+    private int countVisitedCountries(boolean [] visitedCountries)
+    {
+        int count = 0;
+        for (boolean n:visitedCountries
+             ) {
+            if(n)
+                count++;
+        }
+        return count;
+    }
     //is used to check if a square that is next to current is according to rules of the game and can be a part of solution
     private boolean checkNextCell( int i, int j,
                                   Cell current, int currentCountryIndex, int startI, int startJ)
     {
-        Vector<Integer> visitedCountries = new Vector<>();
+        try {
+        //Vector<Integer> visitedCountries = new Vector<>();
+        boolean [] visitedCountries = new boolean[gameboard.getNumberOfCountries()];
+
 
           if(current.getParentI()== i && current.getParentJ() == j)
               return false; // is the square we came from
           if(belongsToPath(i, j, reversePath(current, startI, startJ, visitedCountries)))
               return false; //already belongs to this path
           if((gameboard.squares[i][j].getCountryIndex() != currentCountryIndex
-                && visitedCountries.contains(gameboard.squares[i][j].getCountryIndex())
-                && gameboard.squares[i][j].getCountryIndex() != visitedCountries.elementAt(0)))
+                && visitedCountries[gameboard.squares[i][j].getCountryIndex()]//visitedCountries.contains(gameboard.squares[i][j].getCountryIndex())
+                && gameboard.squares[i][j].getCountryIndex() != gameboard.squares[startI][startJ].getCountryIndex()))//visitedCountries.elementAt(0)))
               return false; // belongs to country that has been visited
+        }
+        catch (Exception e)
+        {
+            System.out.println("checknextcell " + e.getMessage());
+            return false;
+        }
 
           return true;
     }
@@ -126,21 +156,23 @@ public class AStar {
         return false;
     }
 
-    private Vector <Integer> reversePath(Cell cell, int startI, int startJ, Vector <Integer> visitedCountries)
+    private Vector <Integer> reversePath(Cell cell, int startI, int startJ, boolean [] visitedCountries)//Vector <Integer> visitedCountries)
     {
         if(cell.getI() == startI && cell.getJ() == startJ && cell.isStartCell())
         {
             Vector <Integer> path = new Vector <>();
             path.add(cell.getI());
             path.add(cell.getJ());
-            visitedCountries.add(gameboard.squares[cell.getI()][cell.getJ()].getCountryIndex());
+            //visitedCountries.add(gameboard.squares[cell.getI()][cell.getJ()].getCountryIndex());
+            visitedCountries[gameboard.squares[cell.getI()][cell.getJ()].getCountryIndex()] = true;
             return path;
         }
         Vector<Integer> path = reversePath(cell.getParent(), startI, startJ, visitedCountries);
         path.add(cell.getI());
         path.add(cell.getJ());
-        if(!visitedCountries.contains(gameboard.squares[cell.getI()][cell.getJ()].getCountryIndex()))
-            visitedCountries.add(gameboard.squares[cell.getI()][cell.getJ()].getCountryIndex());
+        //if(!visitedCountries.contains(gameboard.squares[cell.getI()][cell.getJ()].getCountryIndex()))
+          //  visitedCountries.add(gameboard.squares[cell.getI()][cell.getJ()].getCountryIndex());
+        visitedCountries[gameboard.squares[cell.getI()][cell.getJ()].getCountryIndex()] = true;
         return path;
     }
 
@@ -172,19 +204,23 @@ public class AStar {
 
     public int heuristic(int startI, int startJ, int i, int j, int countryIndex, int prevCountryIndex)
     {
-        int cost = Math.abs(i - startI) + Math.abs(j - startJ);
 
-        /*if(gameboard.squares[i][j].getUpperEdge() != BorderType.EXTERNAL)
+        int cost = 0;
+        double solutionLength = (solution.size()/2)/((4/5) * Math.pow(gameboard.getSize(), 2));
+
+        cost += solutionLength * Math.abs(i - startI) + Math.abs(j - startJ);
+
+        if(gameboard.squares[i][j].getUpperEdge() != BorderType.EXTERNAL)
             cost +=5;
         if(gameboard.squares[i][j].getRightEdge() != BorderType.EXTERNAL)
             cost +=5;
         if(gameboard.squares[i][j].getBottomEdge() != BorderType.EXTERNAL)
             cost +=5;
         if(gameboard.squares[i][j].getLeftEdge() != BorderType.EXTERNAL)
-            cost +=5;*/
+            cost +=5;
 
-        //if(countryIndex != prevCountryIndex)
-          //  cost+=5;
+        if(countryIndex != prevCountryIndex)
+            cost+=5;
 
         return cost;
     }
@@ -200,7 +236,7 @@ public class AStar {
         }
         catch (Exception e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Exception in getSolutionNext"+e.getMessage());
         }
         return 0;
     }

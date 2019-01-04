@@ -14,7 +14,7 @@ public class Main {
             main.ReadFile();
             //main.MainBoard.aStar.testSolution();
             main.MainBoard.aStar.solve();
-
+            main.window.repaint();
         }
         catch (ArrayIndexOutOfBoundsException arrayE)
         {
@@ -43,7 +43,7 @@ public class Main {
     private void ReadFile()
     {
         try {
-            FileReader fr = new FileReader("countryroad2.txt");
+            FileReader fr = new FileReader("countryroad2.txt");//"pierwsza_plansza.txt");
             BufferedReader br = new BufferedReader(fr);
 
             int n; // size of game board
@@ -117,7 +117,7 @@ public class Main {
                 i++;
             }
 
-            MainBoard.setNumberOfCountries(MaxNumberOfCountry);
+            MainBoard.setNumberOfCountries(MaxNumberOfCountry + 1);
             //out.println( MainBoard.getNumberOfCountries()); //check if number of coutries in MainBoard is proper
 
             for(j = 0; j < n; j++)
