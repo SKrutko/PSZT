@@ -135,6 +135,8 @@ public class AStar {
                 && visitedCountries[gameboard.squares[i][j].getCountryIndex()]//visitedCountries.contains(gameboard.squares[i][j].getCountryIndex())
                 && gameboard.squares[i][j].getCountryIndex() != gameboard.squares[startI][startJ].getCountryIndex()))//visitedCountries.elementAt(0)))
               return false; // belongs to country that has been visited
+            if(!hasUnvisitedNeighbours(gameboard.squares[i][j].getCountryIndex(), visitedCountries))
+                return false;
         }
         catch (Exception e)
         {
@@ -143,6 +145,14 @@ public class AStar {
         }
 
           return true;
+    }
+    private boolean hasUnvisitedNeighbours(int countryIndex, boolean [] visitedCountries)
+    {
+        for (int i = 0; i < gameboard.getNumberOfCountries(); i++) {
+            if(gameboard.areNeighbours(countryIndex, i) && !visitedCountries[i])
+                return true;
+        }
+        return false;
     }
 
     //checks if square (i,j) belongs to given path
@@ -195,32 +205,41 @@ public class AStar {
         int cost = current.getCostC() + 1;// +
         Cell newCell = new Cell(i, j, current.getI(), current.getJ());
         newCell.setCostC(cost);
-        cost += heuristic(start1, start2, i,j, gameboard.squares[i][j].getCountryIndex(), gameboard.squares[current.getI()][ current.getJ()].getCountryIndex());
+        cost += heuristic(start1, start2, i,j, gameboard.squares[i][j].getCountryIndex(), gameboard.squares[current.getI()][ current.getJ()].getCountryIndex(), current);
         newCell.setCostCh(cost);
         newCell.setIJ(i, j);
         newCell.setParent(current);
         openSquares.add(newCell);
     }
 
-    public int heuristic(int startI, int startJ, int i, int j, int countryIndex, int prevCountryIndex)
+    public int heuristic(int startI, int startJ, int i, int j, int countryIndex, int prevCountryIndex, Cell parentCell)
     {
-
+        boolean [] visitedCountries = new boolean[gameboard.getNumberOfCountries()];
         int cost = 0;
         double solutionLength = (solution.size()/2)/((4/5) * Math.pow(gameboard.getSize(), 2));
 
-        cost += solutionLength * Math.abs(i - startI) + Math.abs(j - startJ);
+        cost += solutionLength *( Math.abs(i - startI) + Math.abs(j - startJ));
 
-        if(gameboard.squares[i][j].getUpperEdge() != BorderType.EXTERNAL)
-            cost +=5;
-        if(gameboard.squares[i][j].getRightEdge() != BorderType.EXTERNAL)
-            cost +=5;
-        if(gameboard.squares[i][j].getBottomEdge() != BorderType.EXTERNAL)
-            cost +=5;
-        if(gameboard.squares[i][j].getLeftEdge() != BorderType.EXTERNAL)
-            cost +=5;
+        if(gameboard.squares[i][j].getUpperEdge() != BorderType.EXTERNAL ||
+                belongsToPath(i - 1, j, reversePath(parentCell, startI, startJ , visitedCountries))
+                || visitedCountries[gameboard.squares[i - 1][j].getCountryIndex()])
+            cost +=gameboard.getSize();
+        if(gameboard.squares[i][j].getRightEdge() != BorderType.EXTERNAL ||
+                belongsToPath(i, j + 1, reversePath(parentCell, startI, startJ , visitedCountries))
+                || visitedCountries[gameboard.squares[i][j + 1].getCountryIndex()])
+            cost +=gameboard.getSize();
+        if(gameboard.squares[i][j].getBottomEdge() != BorderType.EXTERNAL ||
+                belongsToPath(i +1 , j, reversePath(parentCell, startI, startJ , visitedCountries))
+                || visitedCountries[gameboard.squares[i + 1][j].getCountryIndex()])
+            cost +=gameboard.getSize();
+        if(gameboard.squares[i][j].getLeftEdge() != BorderType.EXTERNAL ||
+                belongsToPath(i,j - 1, reversePath(parentCell, startI, startJ , visitedCountries))
+                || visitedCountries[gameboard.squares[i][j - 1].getCountryIndex()])
+            cost +=gameboard.getSize();
+        cost-=gameboard.getSize();
 
         if(countryIndex != prevCountryIndex)
-            cost+=5;
+            cost+=gameboard.getCountrySize(prevCountryIndex);
 
         return cost;
     }

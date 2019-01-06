@@ -43,7 +43,7 @@ public class Main {
     private void ReadFile()
     {
         try {
-            FileReader fr = new FileReader("countryroad2.txt");//"pierwsza_plansza.txt");
+            FileReader fr = new FileReader("druga_plansza.txt");
             BufferedReader br = new BufferedReader(fr);
 
             int n; // size of game board
