@@ -3,15 +3,18 @@ import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Vector;
 
+import static java.lang.Math.abs;
+
 public class AStar {
     private GameBoard gameboard;
-    private Window window;
+    protected Window window;
 
     //jeśli rowzwiązanie składa się z n kwadratów
     //to solution zawiera 2n elementów
     //każde dwa to (i,j) następnego kwadratu
     //jeśli rozwiązanie jest zamknięte to pierwszy element jest na poczatku i końcu
-    private Vector<Integer> solution = new Vector<>();
+    protected Vector<Integer> solution = new Vector<>();
+    protected Vector<Integer> userSolution;
 
     private boolean solved = false;
     AStar(GameBoard gameBoard, Window window)
@@ -19,6 +22,95 @@ public class AStar {
         this.gameboard = gameBoard;
         this.window = window;
     }
+
+    public boolean checkUserSolution(Vector <Integer> solutionI, Vector<Integer> solutionJ)
+    {
+        try{
+        userSolution = new Vector<>();
+        if(solutionI.size() < 2 || solutionJ.size() < 2){
+            return false;
+        }
+        userSolution.add(solutionI.elementAt(0));
+        userSolution.add(solutionJ.elementAt(0));
+        userSolution.add(solutionI.elementAt(1));
+        userSolution.add(solutionJ.elementAt(1));
+
+        solutionI.remove(0);
+        solutionJ.remove(0);
+        solutionI.remove(0);
+        solutionJ.remove(0);
+
+
+    for (int i = 0; i < solutionI.size(); i++) {
+        if (solutionI.elementAt(i) == userSolution.elementAt(0) && solutionJ.elementAt(i) == userSolution.elementAt(1)) {
+            if (i % 2 == 0) {
+                userSolution.add(0, solutionJ.elementAt(i + 1));
+                userSolution.add(0, solutionI.elementAt(i + 1));
+                solutionI.remove(i);
+                solutionI.remove(i);
+                solutionJ.remove(i);
+                solutionJ.remove(i);
+            } else {
+                userSolution.add(0, solutionJ.elementAt(i - 1));
+                userSolution.add(0, solutionI.elementAt(i - 1));
+                solutionI.remove(i - 1);
+                solutionI.remove(i - 1);
+                solutionJ.remove(i - 1);
+                solutionJ.remove(i - 1);
+            }
+            i = -1;
+        }
+        else if (solutionI.elementAt(i) == userSolution.elementAt(userSolution.size() - 2)
+                && solutionJ.elementAt(i) == userSolution.elementAt(userSolution.size() - 1)){
+            if (i % 2 == 0) {
+                userSolution.add(solutionJ.elementAt(i + 1));
+                userSolution.add(solutionI.elementAt(i + 1));
+                solutionI.remove(i);
+                solutionI.remove(i);
+                solutionJ.remove(i);
+                solutionJ.remove(i);
+            } else {
+
+                userSolution.add(solutionJ.elementAt(i - 1));
+                userSolution.add(solutionI.elementAt(i - 1));
+                solutionI.remove(i - 1);
+                solutionI.remove(i - 1);
+                solutionJ.remove(i - 1);
+                solutionJ.remove(i - 1);
+
+            }
+            i = -1;
+        }
+    }
+}
+catch (Exception e)
+{
+    System.out.println("Exception: " + e.getMessage());
+}
+            if(!solutionI.isEmpty()){System.out.println("solution is not empty");
+                return false;}
+
+
+      if(abs(userSolution.elementAt(0) - userSolution.elementAt(userSolution.size()-2 ))
+              + abs(userSolution.elementAt(1) - userSolution.elementAt(userSolution.size()-1)) <=1)
+        {
+            return false;
+        }
+        boolean [] visitedCountries = new boolean[gameboard.getNumberOfCountries()];
+        for (int i = 0; i <gameboard.getNumberOfCountries() ; i++) {
+            visitedCountries[i] = false;
+        }
+
+        for (int i = 0; i < userSolution.size()-1; i+=2) {
+            visitedCountries[gameboard.squares[userSolution.elementAt(i)][userSolution.elementAt(i+1)].getCountryIndex()] = true;
+        }
+        int numberOfVisitedCountries = countVisitedCountries(visitedCountries);
+        userSolution.add(userSolution.elementAt(0));
+        userSolution.add(userSolution.elementAt(1));
+
+        return checkSolution(numberOfVisitedCountries, userSolution);
+    }
+
     public void solve()
     {
         int startI, startJ; //A* needs start and end node, for country road this are the same points
@@ -35,7 +127,9 @@ public class AStar {
             }
         }
         timeStop = System.currentTimeMillis();
-        System.out.println("time = " + (timeStop - timeStart));
+        if ((timeStop - timeStart) != 0)
+            System.out.println("time = " + (timeStop - timeStart));
+
 
     }
     //
@@ -62,7 +156,7 @@ public class AStar {
         addToOpenSquares(parentCell, startI, startJ, parentCell.getI(), parentCell.getJ() + 1, openSquares);
         //openSquares.add(parentCell);
 
-        while(openSquares.size() > 0 && !checkSolution(countVisitedCountries(visitedCountries)))
+        while(openSquares.size() > 0 && !checkSolution(countVisitedCountries(visitedCountries), this.solution))
         {
             int index = pickNext(openSquares);//picks node with the smallest cost = C + h and returns its index
             Cell current = openSquares.elementAt(index);
@@ -135,8 +229,7 @@ public class AStar {
                 && visitedCountries[gameboard.squares[i][j].getCountryIndex()]//visitedCountries.contains(gameboard.squares[i][j].getCountryIndex())
                 && gameboard.squares[i][j].getCountryIndex() != gameboard.squares[startI][startJ].getCountryIndex()))//visitedCountries.elementAt(0)))
               return false; // belongs to country that has been visited
-            if(!hasUnvisitedNeighbours(gameboard.squares[i][j].getCountryIndex(), visitedCountries))
-                return false;
+
         }
         catch (Exception e)
         {
@@ -145,14 +238,6 @@ public class AStar {
         }
 
           return true;
-    }
-    private boolean hasUnvisitedNeighbours(int countryIndex, boolean [] visitedCountries)
-    {
-        for (int i = 0; i < gameboard.getNumberOfCountries(); i++) {
-            if(gameboard.areNeighbours(countryIndex, i) && !visitedCountries[i])
-                return true;
-        }
-        return false;
     }
 
     //checks if square (i,j) belongs to given path
@@ -218,7 +303,7 @@ public class AStar {
         int cost = 0;
         double solutionLength = (solution.size()/2)/((4/5) * Math.pow(gameboard.getSize(), 2));
 
-        cost += solutionLength *( Math.abs(i - startI) + Math.abs(j - startJ));
+        cost += solutionLength *( abs(i - startI) + abs(j - startJ));
 
         if(gameboard.squares[i][j].getUpperEdge() != BorderType.EXTERNAL ||
                 belongsToPath(i - 1, j, reversePath(parentCell, startI, startJ , visitedCountries))
@@ -260,7 +345,7 @@ public class AStar {
         return 0;
     }
 
-    public boolean checkSolution(int numberOfVisitedCountries)
+    public boolean checkSolution(int numberOfVisitedCountries, Vector <Integer> solution)
     {
         try {
             //check if path is closed
@@ -279,8 +364,9 @@ public class AStar {
                     gameboard.squares[i][j].setBelongsToSolution(false);
             }
             //mark solution
+
             for (int i = 0; i < solution.size()-1; i += 2) {
-                gameboard.squares[solution.elementAt(i)][solution.elementAt(i + 1)].setBelongsToSolution(true);
+                gameboard.squares[(int)(solution.elementAt(i))][(int)solution.elementAt(i + 1)].setBelongsToSolution(true);
             }
             //check verticals
             for (int i = 0; i < gameboard.getSize(); i++) {
@@ -317,7 +403,6 @@ public class AStar {
             System.out.println("Exception in check Solution "+ e.getMessage());
             return false;
         }
-        System.out.println("Solution is correct");
         solved = true;
         return true;
     }

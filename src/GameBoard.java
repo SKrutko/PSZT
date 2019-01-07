@@ -16,7 +16,6 @@ public class GameBoard {
     private int[] countrySquaresCounter;
     private int [] [] countryNeighbours;
 
-
     public GameBoard(int n, Window window) {
         size = n;
         squares = new Square[n][n];
@@ -131,72 +130,6 @@ public class GameBoard {
         return squares[i][j].getRightEdge();
     }
 
-    public void testView() // created for classes view and window testing only!!
-    {
-
-
-        /*squares[0][0].setRightEdge(BorderType.INTERNAL); //0
-        squares[0][1].setRightEdge(BorderType.INTERNAL); //0
-        squares[0][2].setRightEdge(BorderType.EXTERNAL); //1
-        squares[0][3].setRightEdge(BorderType.INTERNAL); //0
-        squares[0][4].setRightEdge(BorderType.BORDER);//-1
-
-        squares[1][0].setRightEdge(BorderType.INTERNAL);//0
-        squares[1][1].setRightEdge(BorderType.INTERNAL);//0
-        squares[1][2].setRightEdge(BorderType.EXTERNAL);//1
-        squares[1][3].setRightEdge(BorderType.EXTERNAL);//1
-        squares[1][4].setRightEdge(BorderType.BORDER);
-
-        squares[2][0].setRightEdge(BorderType.EXTERNAL);//1
-        squares[2][1].setRightEdge(BorderType.INTERNAL);//0
-        squares[2][2].setRightEdge(BorderType.INTERNAL);//0
-        squares[2][3].setRightEdge(BorderType.INTERNAL);//0
-        squares[2][4].setRightEdge(BorderType.BORDER);
-
-        squares[3][0].setRightEdge(BorderType.EXTERNAL);//1
-        squares[3][1].setRightEdge(BorderType.EXTERNAL);//1
-        squares[3][2].setRightEdge(BorderType.EXTERNAL);//1
-        squares[3][3].setRightEdge(BorderType.INTERNAL);//0
-        squares[3][4].setRightEdge(BorderType.BORDER);
-
-        squares[4][0].setRightEdge(BorderType.INTERNAL);//0
-        squares[4][1].setRightEdge(BorderType.EXTERNAL);//1
-        squares[4][2].setRightEdge(BorderType.INTERNAL);//0
-        squares[4][3].setRightEdge(BorderType.INTERNAL);//0
-        squares[4][4].setRightEdge(BorderType.BORDER);
-
-        squares[0][0].setBottomEdge(BorderType.EXTERNAL);//1
-        squares[0][1].setBottomEdge(BorderType.EXTERNAL);//1
-        squares[0][2].setBottomEdge(BorderType.EXTERNAL);//1
-        squares[0][3].setBottomEdge(BorderType.INTERNAL);//0
-        squares[0][4].setBottomEdge(BorderType.EXTERNAL);//1
-
-        squares[1][0].setBottomEdge(BorderType.INTERNAL);//0
-        squares[1][1].setBottomEdge(BorderType.EXTERNAL);//1
-        squares[1][2].setBottomEdge(BorderType.EXTERNAL);//1
-        squares[1][3].setBottomEdge(BorderType.EXTERNAL);//1
-        squares[1][4].setBottomEdge(BorderType.INTERNAL);//0
-
-        squares[2][0].setBottomEdge(BorderType.INTERNAL);//0
-        squares[2][1].setBottomEdge(BorderType.INTERNAL);//0
-        squares[2][2].setBottomEdge(BorderType.EXTERNAL);//1
-        squares[2][3].setBottomEdge(BorderType.EXTERNAL);//1
-        squares[2][4].setBottomEdge(BorderType.EXTERNAL);//1
-
-        squares[3][0].setBottomEdge(BorderType.EXTERNAL);//1
-        squares[3][1].setBottomEdge(BorderType.EXTERNAL);//1
-        squares[3][2].setBottomEdge(BorderType.INTERNAL);//0
-        squares[3][3].setBottomEdge(BorderType.EXTERNAL);//1
-        squares[3][4].setBottomEdge(BorderType.EXTERNAL);//1
-
-        squares[4][0].setBottomEdge(BorderType.BORDER);
-        squares[4][1].setBottomEdge(BorderType.BORDER);
-        squares[4][2].setBottomEdge(BorderType.BORDER);
-        squares[4][3].setBottomEdge(BorderType.BORDER);
-        squares[4][4].setBottomEdge(BorderType.BORDER);
-*/
-
-    }
 
     public int getNumberOfCountryIndex(int i, int j, int index) //to check in console if values are proper
     {
@@ -212,12 +145,10 @@ public class GameBoard {
     {
         return countrySquaresCounter[countryIndex];
     }
-    public boolean areNeighbours(int firstCountry, int secondCountry)
-    {
-        if(countryNeighbours[firstCountry][secondCountry] > 0)
-            return true;
-        return false;
-    }
 
+    public void initSolve()
+    {
+        aStar.solve();
+    }
 
 }
