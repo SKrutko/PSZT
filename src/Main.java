@@ -10,11 +10,20 @@ public class Main {
 
     public static void main(String[] args) {
         try {
+
             Main main = new Main();
-            main.ReadFile();
-            //main.MainBoard.aStar.testSolution();
-            main.MainBoard.aStar.solve();
+            main.ReadFile(args[0]);
+            if(args[1].equals("1")) {
+                main.MainBoard.aStar.solve();
+            }
+
+            //main.MainBoard.aStar.solve();
+
             main.window.repaint();
+
+            //main.MainBoard.aStar.testSolution();
+
+
         }
         catch (ArrayIndexOutOfBoundsException arrayE)
         {
@@ -40,10 +49,11 @@ public class Main {
         }
     }
 
-    private void ReadFile()
+    private void ReadFile(String game)
     {
         try {
-            FileReader fr = new FileReader("countryroad2.txt");//"pierwsza_plansza.txt");
+           // FileReader fr = new FileReader("pierwsza_plansza.txt");
+            FileReader fr = new FileReader(game);
             BufferedReader br = new BufferedReader(fr);
 
             int n; // size of game board
@@ -75,18 +85,17 @@ public class Main {
             for (int s = 0; s<n; s++){
                 previousLine[s] = -1;
             }
-           //while((str = br.readLine() )!= null)
+
             for(; x<n+n; x++)
             {
                 str = br.readLine();
-                //out.println(str);
+
                 String [] line = str.split(" ");
 
                 for (String s:line
                         ) {
                     int currentBottomType = Integer.parseInt(s);
                     MainBoard.HorizontalBorder(i, j, previousLine[j], currentBottomType);
-                    out.println( j + "  " + previousLine[j] + " " + currentBottomType);
                     previousLine[j] = currentBottomType;
 
                     j++;
@@ -107,7 +116,6 @@ public class Main {
                         ) {
                     int index = Integer.parseInt(s);
                     MainBoard.countCountries(i,j,index);
-                    out.println( "Number of country. Square" + "[" + i + "][" + j + "]" + "=" + MainBoard.getNumberOfCountryIndex(i,j,index));
                     j++;
 
                     if(MaxNumberOfCountry < index)
@@ -118,23 +126,14 @@ public class Main {
             }
 
             MainBoard.setNumberOfCountries(MaxNumberOfCountry + 1);
-            //out.println( MainBoard.getNumberOfCountries()); //check if number of coutries in MainBoard is proper
 
             for(j = 0; j < n; j++)
             {
                 MainBoard.HorizontalBorder(n - 1, j, previousLine[j], -1);
             }
 
-            try {
-                MainBoard.testView();//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!testing View
-            }
-            catch (Exception e) {
-                out.println("ERROR WHILE TESTING VIEW");
-            }
-
-
             br.close();
-        //    MainBoard.HorizontalEdge(n);
+
         } catch (IOException e) {
             out.println("Error while opening file");
         }
