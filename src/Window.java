@@ -34,5 +34,7 @@ public class Window {
         view.repaint();
     }
 
+    public void canDraw(){ view.canDraw = false; }
+
 
 }
