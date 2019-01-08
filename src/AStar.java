@@ -87,8 +87,10 @@ catch (Exception e)
 {
     System.out.println("Exception: " + e.getMessage());
 }
-            if(!solutionI.isEmpty()){System.out.println("solution is not empty");
-                return false;}
+            if(!solutionI.isEmpty())
+            {
+                return false;
+            }
 
 
       if(abs(userSolution.elementAt(0) - userSolution.elementAt(userSolution.size()-2 ))

@@ -35,7 +35,7 @@ public class View extends JPanel implements MouseListener {
 
 
     int x, y;
-    boolean canDraw = true;
+    protected boolean canDraw = true;
     boolean canDrawAutomatic = true;
     private Vector<Integer> solutionX = new Vector<>();
     private Vector<Integer> solutionY = new Vector<>();
@@ -143,11 +143,12 @@ public class View extends JPanel implements MouseListener {
 
     private void popUpWindow(String message)
     {
-        JFrame frame = new JFrame("JOptionPane showMessageDialog example");
+        //popUpWindowCheck = 0;
+        JFrame frame = new JFrame(message);
+
 
         // show a joptionpane dialog using showMessageDialog
         JOptionPane.showMessageDialog(frame, message, "Solution", JOptionPane.INFORMATION_MESSAGE);
-       // JOptionPane.
 
     }
 
@@ -165,7 +166,7 @@ public class View extends JPanel implements MouseListener {
                 gameBoard.aStar.window.repaint();
                 canDraw = true;
 
-                popUpWindowCheck = 0;
+               //
 
             }
         });
@@ -193,6 +194,7 @@ public class View extends JPanel implements MouseListener {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 Vector <Integer> copyX, copyY;
                 copyX = new Vector<>(solutionX);
                 copyY = new Vector<>(solutionY);
@@ -257,10 +259,12 @@ public class View extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        popUpWindowCheck = 0;
         if(canDraw == true)
         {
             x = e.getX();

@@ -10,11 +10,26 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-
             Main main = new Main();
+            String[] namesOfFiles = {"pierwsza_plansza.txt", "druga_plansza.txt", "trzecia_plansza.txt", "czwarta_plansza.txt",
+                    "piata_plansza.txt", "szosta_plansza", "siodma_plansza"};
+
+            if(!args[0].equals(namesOfFiles[0]) &&  !args[0].equals(namesOfFiles[1]) &&  !args[0].equals(namesOfFiles[2])  &&  !args[0].equals(namesOfFiles[3]) &&
+            !args[0].equals(namesOfFiles[4]) && !args[0].equals(namesOfFiles[5]) && !args[0].equals(namesOfFiles[6])) {
+                System.out.println("Name of file is wrong!");
+                System.exit(-1);
+
+            }
+
+            if(!args[1].equals("1") && !args[1].equals("2"))
+            {
+                    System.out.println("State of game is wrong!");
+                    System.exit(-1);
+            }
             main.ReadFile(args[0]);
             if(args[1].equals("1")) {
                 main.MainBoard.aStar.solve();
+                main.window.canDraw();
             }
 
             //main.MainBoard.aStar.solve();
