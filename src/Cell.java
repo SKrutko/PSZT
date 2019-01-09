@@ -3,8 +3,7 @@ public class Cell {
     private int costCh = 0;
     private int parentI, parentJ;
     private boolean isStartCell = false;
-    private int i,j; // i, j - współrzędne w squares, n = i * gameBoard.size() +
-
+    private int i,j; // i, j - współrzędne w squares
     private Cell parent;
 
     public Cell(int i, int j, int parentI, int parentJ)
@@ -39,10 +38,6 @@ public class Cell {
         return parentJ;
     }
 
-    public void setParent(int parentI, int parentJ) {
-        this.parentI = parentI;
-        this.parentJ = parentJ;
-    }
     public void setIJ(int i, int j)
     {
         this.i = i;

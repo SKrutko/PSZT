@@ -1,11 +1,3 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import static java.lang.System.out;
-
 public class GameBoard {
 
     private int size;
@@ -14,7 +6,7 @@ public class GameBoard {
     private int numberOfCountries;
     public AStar aStar;
     private int[] countrySquaresCounter;
-    private int [] [] countryNeighbours;
+    private int[][] countryNeighbours;
 
     public GameBoard(int n, Window window) {
         size = n;
@@ -35,7 +27,7 @@ public class GameBoard {
 
         this.numberOfCountries = numberOfCountries;
         countrySquaresCounter = new int[numberOfCountries];
-        countryNeighbours = new int [numberOfCountries][numberOfCountries];
+        countryNeighbours = new int[numberOfCountries][numberOfCountries];
         for (int i = 0; i < numberOfCountries; i++) {
             countrySquaresCounter[i] = 0;
             for (int j = 0; j < numberOfCountries; j++) {
@@ -54,12 +46,11 @@ public class GameBoard {
             }
         }
     }
-    private void fillCountryNeighbours()
-    {
+
+    private void fillCountryNeighbours() {
         for (int i = 0; i < getSize(); i++) {
             for (int j = 0; j < getSize() - 1; j++) {
-                if(squares[i][j].getRightEdge() == BorderType.EXTERNAL)
-                {
+                if (squares[i][j].getRightEdge() == BorderType.EXTERNAL) {
                     countryNeighbours[squares[i][j].getCountryIndex()][squares[i][j + 1].getCountryIndex()] = 1;
                     countryNeighbours[squares[i][j + 1].getCountryIndex()][squares[i][j].getCountryIndex()] = 1;
                 }
@@ -67,8 +58,7 @@ public class GameBoard {
         }
         for (int i = 0; i < getSize() - 1; i++) {
             for (int j = 0; j < getSize(); j++) {
-                if(squares[i][j].getRightEdge() == BorderType.EXTERNAL)
-                {
+                if (squares[i][j].getRightEdge() == BorderType.EXTERNAL) {
                     countryNeighbours[squares[i][j].getCountryIndex()][squares[i + 1][j].getCountryIndex()] = 1;
                     countryNeighbours[squares[i + 1][j].getCountryIndex()][squares[i][j].getCountryIndex()] = 1;
                 }
@@ -114,16 +104,8 @@ public class GameBoard {
 
     }
 
-    public BorderType getUpperEdgeType(int i, int j) {
-        return squares[i][j].getUpperEdge();
-    }
-
     public BorderType getBottomEdgeType(int i, int j) {
         return squares[i][j].getBottomEdge();
-    }
-
-    public BorderType getLeftEdgeType(int i, int j) {
-        return squares[i][j].getLeftEdge();
     }
 
     public BorderType getRightEdgeType(int i, int j) {
@@ -131,23 +113,16 @@ public class GameBoard {
     }
 
 
-    public int getNumberOfCountryIndex(int i, int j, int index) //to check in console if values are proper
-    {
-        return squares[i][j].getCountryIndex();
-    }
-
     public void countCountries(int i, int j, int index) {
 
         squares[i][j].setCountryIndex(index);
     }
 
-    public int getCountrySize(int countryIndex)
-    {
+    public int getCountrySize(int countryIndex) {
         return countrySquaresCounter[countryIndex];
     }
 
-    public void initSolve()
-    {
+    public void initSolve() {
         aStar.solve();
     }
 
