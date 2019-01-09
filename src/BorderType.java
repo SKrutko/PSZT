@@ -3,9 +3,6 @@ public enum BorderType {
     INTERNAL(0),
     EXTERNAL(1);
 
-    private int type;
-
     BorderType(int i) {
-        this.type = i;
     }
 }

@@ -1,7 +1,7 @@
 import javax.swing.*;
 
 public class Window {
-    private JFrame  mainWindow;
+    private JFrame mainWindow;
     private View view;
 
 
@@ -10,8 +10,7 @@ public class Window {
 
     public static int gameboardSize;
 
-    public Window()
-    {
+    public Window() {
         //set basic info about main window
         mainWindow = new JFrame("Country Road");
         mainWindow.setVisible(true);
@@ -30,11 +29,13 @@ public class Window {
         view.setGameBoard(gameBoard);
     }
 
-    public void repaint(){
+    public void repaint() {
         view.repaint();
     }
 
-    public void canDraw(){ view.canDraw = false; }
+    public void canDraw() {
+        view.canDraw = false;
+    }
 
 
 }

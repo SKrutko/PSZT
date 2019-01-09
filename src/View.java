@@ -2,13 +2,8 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.*;
-
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
-
-import static java.lang.Math.round;
-import static java.lang.System.out; //usunac po zrobieniu akcji przycisku
 
 public class View extends JPanel implements MouseListener {
     //colors used for painting
@@ -33,7 +28,6 @@ public class View extends JPanel implements MouseListener {
     JButton revealButton = new JButton("reveal");
 
 
-
     int x, y;
     protected boolean canDraw = true;
     boolean canDrawAutomatic = true;
@@ -52,10 +46,11 @@ public class View extends JPanel implements MouseListener {
 
     private void paintGameboard(Graphics g)//paints the game board background
     {
-        gameboardZero.setLocation((Window.frameWidth - Window.gameboardSize )/ 2, 0);
+        gameboardZero.setLocation((Window.frameWidth - Window.gameboardSize) / 2, 0);
         g.setColor(gameboardColor);
-        g.fillRect(gameboardZero.x , gameboardZero.y, Window.gameboardSize, Window.gameboardSize);
+        g.fillRect(gameboardZero.x, gameboardZero.y, Window.gameboardSize, Window.gameboardSize);
     }
+
     private void paintBackground(Graphics g)//paints window background
     {
         g.setColor(backgroundColor);
@@ -64,13 +59,13 @@ public class View extends JPanel implements MouseListener {
 
     private void paintBorders(Graphics g)//paints game board borders and squares/countries inside of it
     {
-        int i , j;
+        int i, j;
         g.setColor(borderColor);
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(thickBorder);
         g2.drawRect(gameboardZero.x, gameboardZero.y, Window.gameboardSize, Window.gameboardSize);
 
-        if(gameBoard.getSize() > 0) {
+        if (gameBoard.getSize() > 0) {
             //draw vertical edges
             for (i = 0; i < gameBoard.getSize(); i++) {
                 for (j = 0; j < gameBoard.getSize() - 1; j++) {
@@ -106,57 +101,48 @@ public class View extends JPanel implements MouseListener {
                             gameboardZero.x + (j + 1) * squareSize, gameboardZero.y + (i + 1) * squareSize);
                 }
             }
-
-
         }
     }
-    private void paintRoad(Graphics g)
-    {
+
+    private void paintRoad(Graphics g) {
         int x1, x2, y1, y2;
-        for(int i = 0; i < gameBoard.aStar.getSolutionSize() - 2;)//?
+        for (int i = 0; i < gameBoard.aStar.getSolutionSize() - 2; )//?
         {
             y1 = gameBoard.aStar.getSolutionNext(i);
-            x1 = gameBoard.aStar.getSolutionNext(i+1);
-            y2 = gameBoard.aStar.getSolutionNext(i +2);
-            x2 = gameBoard.aStar.getSolutionNext(i +3);
-            i+=2;
+            x1 = gameBoard.aStar.getSolutionNext(i + 1);
+            y2 = gameBoard.aStar.getSolutionNext(i + 2);
+            x2 = gameBoard.aStar.getSolutionNext(i + 3);
+            i += 2;
             g.setColor(roadrColor);
             Graphics2D g2 = (Graphics2D) g;
             g2.setStroke(thickBorder);
-            g2.drawLine(gameboardZero.x + x1 * squareSize + squareSize/2,
-                    gameboardZero.y + y1 * squareSize + squareSize/2,
-                    gameboardZero.x + x2 * squareSize + squareSize/2,
-                    gameboardZero.y + y2 * squareSize +squareSize/2);
+            g2.drawLine(gameboardZero.x + x1 * squareSize + squareSize / 2,
+                    gameboardZero.y + y1 * squareSize + squareSize / 2,
+                    gameboardZero.x + x2 * squareSize + squareSize / 2,
+                    gameboardZero.y + y2 * squareSize + squareSize / 2);
 
         }
     }
 
-
-    private void paintButton(JButton button, int x, int y){
-        button.setBounds(x,y,100,50); // set size of button
+    private void paintButton(JButton button, int x, int y) {
+        button.setBounds(x, y, 100, 50); // set size of button
         button.setVisible(true); // set visibility
         //button.setBackground(Color.white);
         button.setBorder(new LineBorder(Color.BLACK));
         add(button);
-    };
-
-
-    private void popUpWindow(String message)
-    {
-        //popUpWindowCheck = 0;
-        JFrame frame = new JFrame(message);
-
-
-        // show a joptionpane dialog using showMessageDialog
-        JOptionPane.showMessageDialog(frame, message, "Solution", JOptionPane.INFORMATION_MESSAGE);
-
     }
 
-    private void clearAction(JButton button){
+    private void popUpWindow(String message) {
+        //popUpWindowCheck = 0;
+        JFrame frame = new JFrame(message);
+        // show a joptionpane dialog using showMessageDialog
+        JOptionPane.showMessageDialog(frame, message, "Solution", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void clearAction(JButton button) {
         button.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
+            public void actionPerformed(ActionEvent e) {
 
                 canDrawAutomatic = false;
                 repaint();
@@ -165,61 +151,53 @@ public class View extends JPanel implements MouseListener {
 
                 gameBoard.aStar.window.repaint();
                 canDraw = true;
-
-               //
-
             }
         });
-    };
+    }
 
-    private void revealAction(JButton button){
+    private void revealAction(JButton button) {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 canDraw = false;
                 canDrawAutomatic = true;
-
                 solutionX.clear();
                 solutionY.clear();
-
                 gameBoard.initSolve();
-
                 repaint();
 
             }
         });
-    };
+    }
 
-    private void checkAction(JButton button){
+    private void checkAction(JButton button) {
         button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+                                     @Override
+                                     public void actionPerformed(ActionEvent e) {
+                                         Vector<Integer> copyX, copyY;
+                                         copyX = new Vector<>(solutionX);
+                                         copyY = new Vector<>(solutionY);
+                                         if (gameBoard.aStar.checkUserSolution(copyY, copyX)) {
+                                             if (popUpWindowCheck == 0 && canDraw == true) {
+                                                 popUpWindow("Congartulations!");
+                                                 popUpWindowCheck = 1;
+                                                 canDraw = true;
+                                             }
+                                         } else {
+                                             if (popUpWindowCheck == 0 && canDraw == true) {
+                                                 popUpWindow("It's bad solution :(");
+                                                 popUpWindowCheck = 1;
+                                                 canDraw = true;
+                                             }
+                                         }
+                                         repaint();
 
-                Vector <Integer> copyX, copyY;
-                copyX = new Vector<>(solutionX);
-                copyY = new Vector<>(solutionY);
-                if (gameBoard.aStar.checkUserSolution(copyY, copyX))
-                {
-                    if(popUpWindowCheck == 0 && canDraw == true) {
-                        popUpWindow("Congartulations!");
-                        popUpWindowCheck = 1;
-                        canDraw = true;
-                    }
-                }
-                else
-                {
-                    if(popUpWindowCheck == 0 && canDraw == true) {
-                        popUpWindow("It's bad solution :(");
-                        popUpWindowCheck = 1;
-                        canDraw = true;
-                    }
-                }
-                repaint();
-
-            }
-        }
+                                     }
+                                 }
         );
-    };
+    }
+
+    ;
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -227,8 +205,8 @@ public class View extends JPanel implements MouseListener {
         paintBackground(g);
         paintGameboard(g);
         paintBorders(g);
-        if(canDrawAutomatic == true)
-             paintRoad(g);
+        if (canDrawAutomatic == true)
+            paintRoad(g);
         paintButton(clearButton, 10, 125);
         paintButton(checkButton, 10, 225);
         paintButton(revealButton, 10, 325);
@@ -240,21 +218,19 @@ public class View extends JPanel implements MouseListener {
         g2.setColor(Color.red);
         g2.setStroke(thickBorder);
 
-      int x1, y1, x2, y2;
-        for(int i = 0; i < solutionX.size() - 1;)//?
+        int x1, y1, x2, y2;
+        for (int i = 0; i < solutionX.size() - 1; )//?
         {
             y1 = solutionY.elementAt(i);
-            x1 = solutionX.elementAt(i);//gameBoard.aStar.getSolutionNext(i+1);
-            y2 = solutionY.elementAt(i+1);//gameBoard.aStar.getSolutionNext(i +2);
-            x2 = solutionX.elementAt(i+1);//gameBoard.aStar.getSolutionNext(i +3);
-            i+=2;
-            g2.drawLine(gameboardZero.x + x1 * squareSize + squareSize/2,
-                    gameboardZero.y + y1 * squareSize + squareSize/2,
-                    gameboardZero.x + x2 * squareSize + squareSize/2,
-                    gameboardZero.y + y2 * squareSize +squareSize/2);
+            x1 = solutionX.elementAt(i);
+            y2 = solutionY.elementAt(i + 1);
+            x2 = solutionX.elementAt(i + 1);
+            i += 2;
+            g2.drawLine(gameboardZero.x + x1 * squareSize + squareSize / 2,
+                    gameboardZero.y + y1 * squareSize + squareSize / 2,
+                    gameboardZero.x + x2 * squareSize + squareSize / 2,
+                    gameboardZero.y + y2 * squareSize + squareSize / 2);
         }
-
-
     }
 
     @Override
@@ -262,11 +238,14 @@ public class View extends JPanel implements MouseListener {
 
     }
 
+    private void removeFromTempVector(int i){
+        solutionX.remove(i);
+        solutionY.remove(i);
+    }
     @Override
     public void mousePressed(MouseEvent e) {
         popUpWindowCheck = 0;
-        if(canDraw == true)
-        {
+        if (canDraw == true) {
             x = e.getX();
             y = e.getY();
 
@@ -274,24 +253,22 @@ public class View extends JPanel implements MouseListener {
                 if (y > (gameboardZero.y + squareSize * p) - 20 && y < (gameboardZero.y + squareSize * p) + 20) {
                     for (int j = 1; j <= gameBoard.getSize(); j++) {
                         if (x > gameboardZero.x + (squareSize * j - squareSize / 2) - 20 &&
-                                x < gameboardZero.x + (squareSize * j - squareSize / 2) + 20)
-                        {
+                                x < gameboardZero.x + (squareSize * j - squareSize / 2) + 20) {
                             boolean canAdd = true;
-                            for (int i = 0; i < solutionX.size(); i=i+2) {
-                                if(solutionX.elementAt(i) == j-1 && solutionX.elementAt(i+1) == j-1 && solutionY.elementAt(i) == p-1
-                                        && solutionY.elementAt(i+1) == p)
-                                {
-                                    solutionX.remove(i);
+                            for (int i = 0; i < solutionX.size(); i = i + 2) {
+                                if (solutionX.elementAt(i) == j - 1 && solutionX.elementAt(i + 1) == j - 1 && solutionY.elementAt(i) == p - 1
+                                        && solutionY.elementAt(i + 1) == p) {
+                                    /*solutionX.remove(i);
                                     solutionX.remove(i);
                                     solutionY.remove(i);
-                                    solutionY.remove(i);
+                                    solutionY.remove(i);*/
+                                    removeFromTempVector(i);
                                     canAdd = false;
                                     repaint();
                                 }
 
                             }
-                            if(canAdd)
-                            {
+                            if (canAdd) {
                                 solutionX.add(j - 1);
                                 solutionY.add(p - 1);
                                 solutionX.add(j - 1);
@@ -304,44 +281,38 @@ public class View extends JPanel implements MouseListener {
                 }
             }
 
-           for (int p = 1; p <= gameBoard.getSize(); p++)
-           {
+            for (int p = 1; p <= gameBoard.getSize(); p++) {
                 if ((y > (gameboardZero.y + squareSize * p - squareSize / 2) - 20)
-                        && (y < (gameboardZero.y + squareSize * p - squareSize / 2) + 20))
-                {
-                    for (int w = 1; w < gameBoard.getSize(); w++)
-                    {
+                        && (y < (gameboardZero.y + squareSize * p - squareSize / 2) + 20)) {
+                    for (int w = 1; w < gameBoard.getSize(); w++) {
                         if ((x > (gameboardZero.x + (squareSize * w) - 20)) &&
-                                 (x < (gameboardZero.x + (squareSize * w) + 20)))
+                                (x < (gameboardZero.x + (squareSize * w) + 20))) {
                             {
-                                 {
-                                     boolean canAdd = true;
-                                       for (int i = 0; i < solutionX.size(); i=i+2)
-                                       {
-                                            if(solutionX.elementAt(i) == w-1 && solutionX.elementAt(i+1) == w
-                                                    && solutionY.elementAt(i) == p-1
-                                                    && solutionY.elementAt(i+1) == p-1)
-                                            {
-                                                solutionX.remove(i);
-                                                solutionX.remove(i);
-                                                solutionY.remove(i);
-                                                solutionY.remove(i);
-                                                canAdd = false;
-                                                repaint();
-                                            }
+                                boolean canAdd = true;
+                                for (int i = 0; i < solutionX.size(); i = i + 2) {
+                                    if (solutionX.elementAt(i) == w - 1 && solutionX.elementAt(i + 1) == w
+                                            && solutionY.elementAt(i) == p - 1
+                                            && solutionY.elementAt(i + 1) == p - 1) {
+                                       /* solutionX.remove(i);
+                                        solutionX.remove(i);
+                                        solutionY.remove(i);
+                                        solutionY.remove(i);*/
+                                        removeFromTempVector(i);
+                                        canAdd = false;
+                                        repaint();
+                                    }
 
-                                       }
-                                       if(canAdd)
-                                       {
-                                            solutionX.add(w - 1);
-                                            solutionY.add(p - 1);
-                                            solutionX.add(w);
-                                            solutionY.add(p-1);
-                                            repaint();
-                                       }
-                                 }
-
+                                }
+                                if (canAdd) {
+                                    solutionX.add(w - 1);
+                                    solutionY.add(p - 1);
+                                    solutionX.add(w);
+                                    solutionY.add(p - 1);
+                                    repaint();
+                                }
                             }
+
+                        }
 
                     }
                 }

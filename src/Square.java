@@ -7,8 +7,6 @@ public class Square {
 
     private boolean belongsToSolution = false;
 
-    private Cell lastCell;
-
     public Square() {
     }
 
